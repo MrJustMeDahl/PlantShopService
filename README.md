@@ -2,6 +2,110 @@
 
 ## Task 1
 
+```json
+GET http://localhost:7007/api/plants
+
+HTTP/1.1 200 OK
+Date: Fri, 03 Nov 2023 17:41:58 GMT
+Content-Type: application/json
+Content-Length: 377
+
+[
+  {
+    "type": "Rose",
+    "name": "Albertine",
+    "maxHeight": 400,
+    "price": 199.5,
+    "id": 1
+  },
+  {
+    "type": "Bush",
+    "name": "Aronia",
+    "maxHeight": 200,
+    "price": 169.5,
+    "id": 2
+  },
+  {
+    "type": "FruitAndBerries",
+    "name": "AromaApple",
+    "maxHeight": 350,
+    "price": 399.5,
+    "id": 3
+  },
+  {
+    "type": "Rhododendron",
+    "name": "Astrid",
+    "maxHeight": 40,
+    "price": 269.5,
+    "id": 4
+  },
+  {
+    "type": "Rose",
+    "name": "The DarkLady",
+    "maxHeight": 100,
+    "price": 199.5,
+    "id": 5
+  }
+]
+```
+```json
+GET http://localhost:7007/api/plants/1
+
+HTTP/1.1 200 OK
+Date: Fri, 03 Nov 2023 17:42:59 GMT
+Content-Type: application/json
+Content-Length: 71
+
+{
+  "type": "Rose",
+  "name": "Albertine",
+  "maxHeight": 400,
+  "price": 199.5,
+  "id": 1
+}
+```
+```json
+GET http://localhost:7007/api/plants/type/rose
+
+HTTP/1.1 200 OK
+Date: Fri, 03 Nov 2023 17:43:21 GMT
+Content-Type: application/json
+Content-Length: 148
+
+[
+  {
+    "type": "Rose",
+    "name": "Albertine",
+    "maxHeight": 400,
+    "price": 199.5,
+    "id": 1
+  },
+  {
+    "type": "Rose",
+    "name": "The DarkLady",
+    "maxHeight": 100,
+    "price": 199.5,
+    "id": 5
+  }
+]
+```
+```json
+POST http://localhost:7007/api/plants
+
+HTTP/1.1 201 Created
+Date: Fri, 03 Nov 2023 17:43:41 GMT
+Content-Type: application/json
+Content-Length: 73
+
+{
+  "type": "Tree",
+  "name": "OliveTree",
+  "maxHeight": 1000,
+  "price": 1499.5,
+  "id": 6
+}
+```
+
 ## Task 2
 
 HTTP method | REST Ressource | Exceptions and status(es)                                                                |
