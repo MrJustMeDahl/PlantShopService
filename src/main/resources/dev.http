@@ -1,0 +1,24 @@
+GET http://localhost:7007/api/plants/1
+
+###
+
+GET http://localhost:7007/api/plants/type/tree
+
+###
+
+GET http://localhost:7007/api/plants/type/rose
+
+###
+
+GET http://localhost:7007/api/plants
+
+###
+
+POST http://localhost:7007/api/plants
+
+{
+"type": "Tree",
+"name": "OliveTree",
+"maxHeight": 1000,
+"price": 1499.50
+}
