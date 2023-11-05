@@ -39,4 +39,8 @@ public class Reseller {
     public void addPlant(Plant plant){
         plants.add(plant);
     }
+
+    public void removePlant(Plant plant) {
+        plants.remove(plant);
+    }
 }

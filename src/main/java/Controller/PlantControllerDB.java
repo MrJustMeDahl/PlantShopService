@@ -1,9 +1,9 @@
 package Controller;
 
-import DAO.IDAO;
 import DAO.PlantDAO;
 import DTO.PlantDTO;
 import io.javalin.http.Handler;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 public class PlantControllerDB implements IPlantController{
 
@@ -38,6 +38,22 @@ public class PlantControllerDB implements IPlantController{
         return ctx -> {
             ctx.status(201);
             ctx.json(dao.add(ctx.bodyAsClass(PlantDTO.class)));
+        };
+    }
+
+    @Override
+    public Handler delete() {
+        return ctx -> {
+            ctx.status(204);
+            ctx.json(dao.delete(Integer.parseInt(ctx.pathParam("id"))));
+        };
+    }
+
+    @Override
+    public Handler addPlantToSeller() {
+        return ctx -> {
+            ctx.status(200);
+            ctx.json(dao.addPlantToReseller(Integer.parseInt(ctx.pathParam("resellerid")), Integer.parseInt(ctx.pathParam("plantid"))));
         };
     }
 }

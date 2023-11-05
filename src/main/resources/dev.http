@@ -22,3 +22,11 @@ POST http://localhost:7007/api/plants
 "maxHeight": 1000,
 "price": 1499.50
 }
+
+###
+
+PUT http://localhost:7007/api/plants/1/1
+
+###
+
+DELETE http://localhost:7007/api/plants/1

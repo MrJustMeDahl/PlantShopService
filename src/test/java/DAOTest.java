@@ -107,6 +107,20 @@ public class DAOTest {
     }
 
     @Test
+    void deletePlantWithReseller() throws APIException{
+        Reseller reseller = dao.addPlantToReseller(1, 1);
+        assertEquals(1, reseller.getPlants().size());
+        Plant deleted = dao.delete(1);
+        Plant expected = new Plant(1, "Rose", "Albertine", 400, 199.50);
+        assertEquals(expected, deleted);
+        try(EntityManager em = emf.createEntityManager()){
+            reseller = em.find(Reseller.class, 1);
+            assertEquals(0, reseller.getPlants().size());
+        }
+        assertThrows(APIException.class, () -> dao.delete(1));
+    }
+
+    @Test
     void addPlantToReseller() throws APIException{
         Reseller reseller = dao.addPlantToReseller(1, 1);
         assertThat(reseller.getPlants().stream().toList(), containsInAnyOrder(p1));

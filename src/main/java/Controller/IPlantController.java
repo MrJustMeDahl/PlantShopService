@@ -8,4 +8,8 @@ public interface IPlantController {
     Handler getByID();
     Handler getByType();
     Handler addNew();
+
+    Handler delete();
+
+    Handler addPlantToSeller();
 }

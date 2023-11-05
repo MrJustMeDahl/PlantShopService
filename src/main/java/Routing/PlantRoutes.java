@@ -18,6 +18,8 @@ public class PlantRoutes {
                 get("/", pc.getAll());
                 get("/{id}", pc.getByID());
                 get("/type/{type}", pc.getByType());
+                put("/{resellerid}/{plantid}", pc.addPlantToSeller());
+                delete("/{id}", pc.delete());
                 post("/", pc.addNew());
             });
         };

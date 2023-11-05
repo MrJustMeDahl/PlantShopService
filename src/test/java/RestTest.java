@@ -1,8 +1,11 @@
 import Config.HibernateConfig;
 import Config.ServerConfig;
+import DAO.IDAO;
+import DAO.PlantDAO;
 import DTO.PlantDTO;
 import Entities.Plant;
 import Entities.Reseller;
+import Exceptions.APIException;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -23,6 +26,7 @@ public class RestTest {
     private Javalin app;
     private Plant p1;
     private Plant p2;
+    private Reseller r1;
     private String baseURL = "http://localhost:7070/api";
 
     @BeforeAll
@@ -40,7 +44,7 @@ public class RestTest {
         Plant p3 = new Plant("FruitAndBerries", "AromaApple", 350, 399.50);
         Plant p4 = new Plant("Rhododendron", "Astrid", 40, 269.50);
         Plant p5 = new Plant("Rose", "The DarkLady", 100, 199.50);
-        Reseller r1 = new Reseller("Lyngby Plantecenter", "Firskovvej 18", "33212334");
+        r1 = new Reseller("Lyngby Plantecenter", "Firskovvej 18", "33212334");
         Reseller r2 = new Reseller("Glostrup Planter", "Tværvej 35", "32233232");
         try (EntityManager em = HibernateConfig.getEntityManagerFactoryConfig().createEntityManager()) {
             em.getTransaction().begin();
@@ -56,7 +60,7 @@ public class RestTest {
     }
 
     @AfterEach
-    void delete() {
+    void deleteTables() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createNativeQuery("TRUNCATE TABLE public.plant RESTART IDENTITY CASCADE").executeUpdate();
@@ -128,7 +132,7 @@ public class RestTest {
     }
 
     @Test
-    void getByTypeNonExist(){
+    void getByTypeNonExist() {
         given()
                 .contentType("application/json")
                 .when()
@@ -140,15 +144,52 @@ public class RestTest {
     }
 
     @Test
-    void add(){
+    void add() {
+        given()
+                .contentType("application/json")
+                .body("{\"name\": \"OliveTree\", \"type\": \"Tree\", \"maxHeight\": 1000, \"price\": 1499.50}")
+                .when()
+                .post(baseURL + "/plants")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .body("id", equalTo(6));
+    }
+
+    @Test
+    void addPlantToReseller() {
+        Reseller reseller =
                 given()
                         .contentType("application/json")
-                        .body("{\"name\": \"OliveTree\", \"type\": \"Tree\", \"maxHeight\": 1000, \"price\": 1499.50}")
                         .when()
-                        .post(baseURL + "/plants")
+                        .put(baseURL + "/plants/1/1")
                         .then()
                         .assertThat()
-                        .statusCode(201)
-                        .body("id", equalTo(6));
+                        .statusCode(200)
+                        .extract().body().jsonPath().getObject("", Reseller.class);
+        assertThat(reseller.getPlants().size(), equalTo(1));
+        assertThat(reseller.getPlants(), contains(p1));
+    }
+
+    @Test
+    void delete() throws APIException {
+        PlantDAO dao = new PlantDAO();
+        dao.addPlantToReseller(1, 1);
+        given()
+                .contentType("application/json")
+                .when()
+                .delete(baseURL + "/plants/1")
+                .then()
+                .assertThat()
+                .statusCode(204);
+
+        given()
+                .contentType("application/json")
+                .when()
+                .delete(baseURL + "/plants/1")
+                .then()
+                .assertThat()
+                .statusCode(404)
+                .body("message", equalTo("The plant you are trying to delete does not exist, please ensure you are using the correct id."));
     }
 }

@@ -48,4 +48,14 @@ public class PlantController implements IPlantController{
             ctx.json(mock.add(ctx.bodyAsClass(PlantDTO.class)));
         };
     }
+
+    @Override
+    public Handler delete() {
+        return null;
+    }
+
+    @Override
+    public Handler addPlantToSeller() {
+        return null;
+    }
 }
